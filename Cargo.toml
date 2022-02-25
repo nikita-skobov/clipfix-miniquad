@@ -26,7 +26,7 @@ sapp-windows = { path ="./native/sapp-windows", version = "=0.2.19" }
 
 [target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd"))'.dependencies]
 sapp-linux = { path ="./native/sapp-linux", version = "=0.1.13", optional = true }
-
+copypasta-ext = "0.3.7"
 sapp-kms = { path ="./native/sapp-kms", version = "=0.1.1", optional = true }
 
 [target.'cfg(target_os = "macos")'.dependencies]

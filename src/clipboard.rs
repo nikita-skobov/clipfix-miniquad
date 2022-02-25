@@ -11,24 +11,21 @@ use crate::Context;
 )))]
 mod linux_x11 {
     use crate::Context;
+    use copypasta_ext::prelude::*;
+    use copypasta_ext::x11_bin::ClipboardContext;
 
     pub fn get(_ctx: &mut Context) -> Option<String> {
-        use std::ffi::CString;
-
-        let bufname = CString::new("CLIPBOARD").unwrap();
-        let fmtname = CString::new("UTF8_STRING").unwrap();
-
-        unsafe { sapp_linux::clipboard::get_clipboard(bufname.as_ptr(), fmtname.as_ptr()) }
+        let mut clip_ctx = ClipboardContext::new().expect("Failed to get clipboard context");
+        match clip_ctx.get_contents() {
+            Ok(o) => Some(o),
+            _ => None
+        }
     }
 
     pub fn set(_ctx: &mut Context, data: &str) {
-        use std::ffi::CString;
-
-        let bufname = CString::new("CLIPBOARD").unwrap();
-
-        unsafe {
-            sapp_linux::clipboard::claim_clipboard_ownership(bufname.as_ptr(), data.to_owned())
-        };
+        // theres a bug somewhere in egui-miniquad, or egui, or egui-macroquad, or macroquad
+        // that somehow calls this multiple times with empty data...
+        // my solution is to remove this, and instead handle Ctrl+C at the user level code.
     }
 }
 
