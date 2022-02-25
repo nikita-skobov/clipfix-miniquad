@@ -23,9 +23,9 @@ mod linux_x11 {
     }
 
     pub fn set(_ctx: &mut Context, data: &str) {
-        // theres a bug somewhere in egui-miniquad, or egui, or egui-macroquad, or macroquad
-        // that somehow calls this multiple times with empty data...
-        // my solution is to remove this, and instead handle Ctrl+C at the user level code.
+        if data.is_empty() { return; }
+        let mut clip_ctx = ClipboardContext::new().expect("Failed to get clipboard context");
+        clip_ctx.set_contents(data.to_string()).expect("Failed to set clipboard");
     }
 }
 
